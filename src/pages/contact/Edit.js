@@ -1,7 +1,6 @@
 import axios from 'axios';
-
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 function Add() {
@@ -21,10 +20,10 @@ function Add() {
       setLocation(res.data.location);
       setDate(res.data.date);
     });
-  }, []);
+  }, [id]);
+
   const {
     register,
-    handleSubmit,
     formState: { errors },
   } = useForm({ mode: 'all' });
   const navigate = useNavigate();
@@ -40,12 +39,26 @@ function Add() {
   function Update(e) {
     e.preventDefault();
     axios.put(`http://localhost:3001/list/${id}`, data).then(navigate('/'));
-    alert('Update Contact successfully');
+    alert(`Update Contact successfully`, +id);
   }
   return (
-    <div className='w-screen h-full flex flex-col justify-center items-center mt-16'>
-      <h2 className='text-2xl font-bold'>Update Contact Details</h2>
-      <form className='w-[50%] h-full flex flex-col mt-2'>
+    <div className='w-screen h-full flex flex-col justify-center items-center'>
+      <h2 className='text-4xl font-bold text-green-600 font-extrabold leading-loose'>
+        UPDATE CONTACT DETAILS
+      </h2>
+      <form className='w-[50%] h-full flex flex-col'>
+        <label class='text-left text-lg leading-normal text-zinc-400 leading-normal font-bold indent-3'>
+          ID
+        </label>
+        <input
+          disabled
+          value={id}
+          className='bg-white/10 outline-none font-normal border border-zinc-400
+        rounded-lg py-4 pl-4 mt-2'
+        />
+        <p className='text-red-500 text-left indent-3 mb-3 font-normal'>
+          {errors.name?.message}
+        </p>
         <label class='text-left text-lg leading-normal text-zinc-400 leading-normal font-bold indent-3'>
           FULL NAME
         </label>
@@ -162,16 +175,22 @@ function Add() {
           value={date + ' (view)'}
           className='bg-white/10 outline-none font-normal border border-zinc-400 rounded-lg py-4 pl-4 mt-2'
         />
-        <p className='text-red-500 text-left indent-3 mb-3 font-normal'>
+        <p className='text-red-500 text-left indent-3 font-normal'>
           {errors.date?.message}
         </p>
         <div>
+          <Link
+            to={`/`}
+            className='hover:bg-teal-600 bg-white hover:shadow-md outline-none rounded-xl font-bold border w-3/4 hover:text-teal-200 text-teal-600 border-zinc-400 text-center py-4 px-32 pl-4 '
+          >
+            Back
+          </Link>
           <button
-            className='bg-teal-600 outline-none font-bold border text-white rounded-lg border-zinc-400 w-2/4 py-4 pl-4 mt-4 '
+            className='hover:bg-red-600 bg-white hover:shadow-md text-center outline-none rounded-xl font-bold border w-48 mt-8 hover:text-red-200 text-red-600 border-zinc-400 py-4 px-4 pl-4 ml-5'
             type='submit'
             onClick={Update}
           >
-            Update Contact
+            Save
           </button>
         </div>
       </form>

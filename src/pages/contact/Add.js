@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -11,13 +12,7 @@ function Add() {
   const [date, setDate] = useState('');
 
   const navigate = useNavigate();
-  const data = {
-    name: name,
-    email: email,
-    phone: phone,
-    location: location,
-    date: date,
-  };
+
   const {
     register,
     handleSubmit,
@@ -27,15 +22,12 @@ function Add() {
   const onSubmit = (data, e) => {
     console.log(data);
     e.target.reset();
-  };
-
-  function submitForm(e) {
     e.preventDefault();
     axios.post('http://localhost:3001/list', data).then(navigate('/'));
-  }
+  };
 
   return (
-    <div className='w-screen h-full flex flex-col justify-center items-center mt-16'>
+    <div className='w-[95vw] h-full justify-center items-center flex flex-col mt-5'>
       <h2 className='text-4xl font-bold text-green-600 font-extrabold leading-loose'>
         ADD NEW CONTACT
       </h2>
@@ -90,7 +82,6 @@ function Add() {
           className='bg-white/10 outline-none font-normal border border-zinc-400 rounded-lg py-4 pl-4 mt-2'
           type='email'
           placeholder='example@email.com'
-          required='true'
         />
         <p className='text-red-500 text-left indent-3 mb-3 font-normal'>
           {errors.email?.message}
@@ -126,6 +117,7 @@ function Add() {
           LOCATION
         </label>
         <select
+          placeholder='Select Location'
           {...register('location', {
             required: 'Location field cannot be blank',
           })}
@@ -133,9 +125,8 @@ function Add() {
           onChange={(e) => setLocation(e.target.value)}
           className='bg-white/10 outline-none font-normal border border-zinc-400 rounded-lg py-4 pl-4 mt-2'
           type='text'
-          placeholder='Select Location'
         >
-          <option value='' disabled={true}>
+          <option value='' disabled>
             Select Location
           </option>
           <option value='Manila'>Manila</option>
@@ -148,12 +139,9 @@ function Add() {
           REGISTERED DATE
         </label>
         <input
-          {...(register &&
-            date === null &&
-            ('date',
-            {
-              required: 'Date field cannot be blank',
-            }))}
+          {...register('date', {
+            required: 'Registered Date field cannot be blank',
+          })}
           value={date}
           className='bg-white/10 outline-none font-normal border border-zinc-400 rounded-lg py-4 pl-4 mt-2'
           datepicker
@@ -161,7 +149,6 @@ function Add() {
           type='text'
           placeholder='Select Current Date'
           onFocus={(e) => (e.target.type = 'date')}
-          onBlur={(e) => (e.target.type = 'text')}
           onChange={(e) => setDate(e.target.value)}
         />
         <p className='text-red-500 text-left indent-3 mb-3 font-normal'>
@@ -169,9 +156,8 @@ function Add() {
         </p>
         <div>
           <button
-            className='bg-teal-600 outline-none font-bold border text-white rounded-lg border-zinc-400 w-2/4 py-4 pl-4 mt-4 '
+            className='bg-teal-600 outline-none font-bold border text-white rounded-lg border-zinc-400 w-2/4 py-4 pl-4 mt-4 mb-5 '
             type='submit'
-            onClick={submitForm}
           >
             Add Contact
           </button>
